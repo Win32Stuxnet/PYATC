@@ -189,7 +189,19 @@
         fetch('/api/status/')
             .then(r => r.json())
             .then(data => {
-                location.reload();
+                // Update status indicator
+                const statusDot = document.querySelector('.stat-value span');
+                const statusLabel = document.querySelector('.stat-value').nextElementSibling;
+                if (data.running) {
+                    statusDot.style.color = 'var(--success)';
+                    statusLabel.textContent = 'Running';
+                } else {
+                    statusDot.style.color = 'var(--danger)';
+                    statusLabel.textContent = 'Stopped';
+                }
+                // Update queue size and last transmission ID
+                document.querySelectorAll('.stat-value')[1].textContent = data.queue_size;
+                document.querySelectorAll('.stat-value')[2].textContent = data.last_played_id;
             })
             .catch(err => console.error('Error:', err));
     }
